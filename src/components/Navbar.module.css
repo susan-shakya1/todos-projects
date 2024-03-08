@@ -1,0 +1,28 @@
+.navbar{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: sticky;
+    top: 0;
+    z-index: 2;
+   
+   padding: 8px;
+    background-color: rgba(232, 233, 234, 0.8);
+}
+.heading{
+    color: rgba(31, 26, 26, 0.829);
+    font-size: 24px;
+    font-weight: 600;
+    font-style: italic;
+    text-align: center;
+    text-decoration: none;
+    
+
+}
+.navContainer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    cursor: pointer;
+}
