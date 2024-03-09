@@ -5,6 +5,7 @@ import "./App.css";
 import { IntroTodo } from "./components/IntroTodo";
 import { TodoUI } from "./components/TodoUI";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { GetId } from "./components/GetId";
 
 // type TTods = {
 //   title: string;
@@ -34,6 +35,10 @@ const router = createBrowserRouter([
         <TodoUI />
       </div>
     ),
+  },
+  {
+    path: "/todos/:id",
+    element: <GetId />,
   },
 ]);
 function App() {

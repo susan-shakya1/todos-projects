@@ -4,8 +4,12 @@ import styles from "./GetTodo.module.css";
 import { MdDelete } from "react-icons/md";
 import { MdEdit } from "react-icons/md";
 import { useMutation } from "@tanstack/react-query";
-
+import { Link } from "react-router-dom";
+import { useState } from "react";
+import { EditModel } from "./EditModel";
 export function GetTodo() {
+  const [isModelOpen, setIsModelOpen] = useState(false);
+
   const qc = useQueryClient();
   const { data, isLoading, isError, error } = useQuery<
     TGetAllTodosOutput,
@@ -62,9 +66,11 @@ export function GetTodo() {
       {data?.data.map((todo) => (
         <div key={todo._id} className={styles.todosContainer}>
           <div className={styles.todoBox}>
-            <h4>
-              <span>Title:-</span> {todo.title}
-            </h4>
+            <Link to={`/todos/${todo._id}`} className={styles.titlelink}>
+              <h4>
+                <span>Title:-</span> {todo.title}
+              </h4>
+            </Link>
             <p>
               <span>Description:-</span>
               {todo.description}
@@ -86,14 +92,13 @@ export function GetTodo() {
             <MdEdit
               className={styles.btn2}
               onClick={() => {
-                console.log(
-                  "checking edit btn working........sdfsdf...sdfsd.f..sdfsdf"
-                );
+                setIsModelOpen(true);
               }}
             />
           </div>
         </div>
       ))}
+      <EditModel isModelOpen={isModelOpen} setIsModelOpen={setIsModelOpen} />
     </div>
   );
 }
