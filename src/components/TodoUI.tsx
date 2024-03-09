@@ -1,18 +1,15 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Navbar } from "./Navbar";
 import styles from "./TodoUI.module.css";
 import { useState } from "react";
-import {
-  TCreateTodoInput,
-  TGetAllTodosOutput,
-  TTodoCreateOutput,
-} from "../data/Todotype";
+import { TCreateTodoInput, TTodoCreateOutput } from "../data/Todotype";
+import { GetTodo } from "./GetTodo";
 
 // creating a todos and posting the data into a backend
 export function TodoUI() {
+  const qc = useQueryClient();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-
   const addTodoMutation = useMutation<
     TTodoCreateOutput,
     Error,
@@ -35,11 +32,17 @@ export function TodoUI() {
     },
     onSuccess: (data) => {
       console.log("data...", data);
+      qc.invalidateQueries({
+        queryKey: ["/api/v1/todos/"],
+      });
+      setTitle("");
+      setDescription("");
     },
   });
 
   const handleTodo = async () => {
     console.log("data..", title, description);
+
     await addTodoMutation.mutateAsync({
       title: title,
       description: description,
@@ -70,7 +73,7 @@ export function TodoUI() {
               }}
             />
 
-            <textarea
+            <input
               id="description"
               className="description"
               placeholder="Description"
@@ -80,10 +83,13 @@ export function TodoUI() {
                 setDescription(value);
               }}
             />
+            <button type="submit" className={styles.addBtn}>
+              Add
+            </button>
           </div>
-          <button type="submit" className={styles.addBtn}>
-            Add
-          </button>
+          <hr />
+
+          <GetTodo />
         </form>
       </div>
     </div>

@@ -1,0 +1,47 @@
+
+.todoMain{
+    margin-top: 30px;
+}
+.todosContainer{
+   border:none;
+    padding: 20px;
+    max-width: 700px;
+    margin: 0 auto;
+    color: aliceblue;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+   background-color:#202124 ;
+  
+
+
+}
+.buttons{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+.buttons .btn1{
+    font-size: 24px;
+   
+    cursor:pointer;
+}
+.buttons .btn1:hover{
+    transition: 0.3s ease-in-out;
+
+    color: rgba(208, 13, 13, 0.925);
+}
+.buttons .btn2{
+    font-size: 24px;
+   
+    cursor:pointer;
+}
+.buttons .btn2:hover{
+    transition: 0.3s ease-in-out;
+    color: rgba(22, 22, 202, 0.762);
+}
+span{
+    color: rgb(224, 112, 51);
+    padding: 0 10px 0 0;
+}

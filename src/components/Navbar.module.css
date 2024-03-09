@@ -7,7 +7,7 @@
     z-index: 2;
    
    padding: 8px;
-    background-color: rgba(232, 233, 234, 0.8);
+    background-color: rgba(232, 233, 234, 0.947);
 }
 .heading{
     color: rgba(31, 26, 26, 0.829);
@@ -16,6 +16,7 @@
     font-style: italic;
     text-align: center;
     text-decoration: none;
+  
     
 
 }
@@ -25,4 +26,5 @@
     align-items: center;
     gap: 15px;
     cursor: pointer;
+    
 }
