@@ -12,6 +12,8 @@
     display: flex;
     justify-content: space-between;
    background-color:#202124 ;
+   font-size: 14px;
+ 
   
 
 
@@ -53,4 +55,9 @@ span{
 h4{
     text-decoration: none;
     color: aliceblue;
+    padding:3px;
 }
+.todoBox p{
+    padding:3px;
+}
+ 

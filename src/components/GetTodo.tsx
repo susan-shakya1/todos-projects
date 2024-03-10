@@ -7,9 +7,10 @@ import { useMutation } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { EditModel } from "./EditModel";
-export function GetTodo() {
+import ReactSwitch from "react-switch";
+export function GetTodo({ title, description }) {
   const [isModelOpen, setIsModelOpen] = useState(false);
-
+  const [checked, setChecked] = useState(false);
   const qc = useQueryClient();
   const { data, isLoading, isError, error } = useQuery<
     TGetAllTodosOutput,
@@ -50,17 +51,42 @@ export function GetTodo() {
     },
   });
 
+  const handleDeleteBtn = async (id: string) => {
+    console.log("the checking a dekete", id);
+    await deleteTodos.mutateAsync(id);
+  };
+  const switchMutation = useMutation({
+    mutationFn: async (id: string) => {
+      const res = await fetch(
+        `http://localhost:8080/api/v1/todos/toggle/status${id}`,
+        {
+          method: "PATCH",
+          headers: {
+            accept: "applications/json",
+          },
+        }
+      );
+      const data = await res.json();
+
+      return data;
+    },
+    onSuccess: (data) => {
+      console.log("checking ........", data);
+      setChecked(data.success);
+      qc.invalidateQueries({
+        queryKey: [`/api/v1/todos/`],
+      });
+    },
+  });
+  const handleSwitch = async (id: string) => {
+    await switchMutation.mutateAsync(id);
+  };
   if (isLoading) {
     return <p>Loading......</p>;
   }
   if (isError) {
     return <p>Loading todos errors: {error.message || ""}</p>;
   }
-
-  const handleDeleteBtn = async (id: string) => {
-    console.log("the checking a dekete", id);
-    await deleteTodos.mutateAsync(id);
-  };
   return (
     <div className={styles.todoMain}>
       {data?.data.map((todo) => (
@@ -80,6 +106,12 @@ export function GetTodo() {
               <span>CreatedAt:-</span> {todo.createdAt}
             </p>
           </div>
+          <ReactSwitch
+            checked={checked}
+            onChange={() => {
+              handleSwitch(todo._id);
+            }}
+          />
           <div className={styles.buttons}>
             <MdDelete
               className={styles.btn1}
@@ -98,7 +130,15 @@ export function GetTodo() {
           </div>
         </div>
       ))}
-      <EditModel isModelOpen={isModelOpen} setIsModelOpen={setIsModelOpen} />
+      <EditModel
+        isModelOpen={isModelOpen}
+        setIsModelOpen={setIsModelOpen}
+        description={description}
+        title={title}
+        id={data?.data.map((todo) => {
+          return todo._id;
+        })}
+      />
     </div>
   );
 }

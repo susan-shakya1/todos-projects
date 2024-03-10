@@ -9,6 +9,7 @@ justify-content: center;
 align-items: center;
 top: 0;
 left: 0;
+
 }
 form{
     color:aliceblue;
@@ -22,6 +23,8 @@ form{
 }
 form input{
     padding: 8px;
+    border:none;
+    outline: none;
 }
 
 .closeBtn{
@@ -43,4 +46,9 @@ button{
     background-color: rgba(67, 67, 203, 0.769);
     color: aliceblue;
     cursor: pointer;
+}
+button:hover{
+    background-color: rgba(17, 166, 17, 0.784);
+    transition: 0.4s ease-in;
+    color:rgb(219, 231, 231)
 }
