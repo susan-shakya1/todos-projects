@@ -90,7 +90,7 @@ export function TodoUI() {
           </div>
           <hr />
 
-          <GetTodo title={title} description={description} />
+          <GetTodo />
         </form>
       </div>
     </div>

@@ -2,14 +2,23 @@ import styles from "./EditModel.module.css";
 import { IoClose } from "react-icons/io5";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { TCreateTodoInput, TTodoCreateOutput } from "../data/Todotype";
-
+import { useState } from "react";
+// update the todo
 export function EditModel({
   isModelOpen,
   setIsModelOpen,
   title,
   description,
   id,
+}: {
+  isModelOpen: boolean;
+  setIsModelOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  title: string;
+  description: string;
+  id: string;
 }) {
+  const [titleState, setTitleState] = useState(title);
+  const [descriptionState, setDescriptionState] = useState(description);
   const qc = useQueryClient();
   const updateMutation = useMutation<
     TTodoCreateOutput,
@@ -34,16 +43,20 @@ export function EditModel({
     onSuccess: (data) => {
       console.log("the data is update fetch", data);
       qc.invalidateQueries({
-        queryKey: ["api/v1/todos/"],
+        queryKey: ["/api/v1/todos/"],
       });
     },
   });
   const handleUpdata = async () => {
     await updateMutation.mutateAsync({
-      title: title,
-      description: description,
+      title: titleState,
+      description: descriptionState,
     });
   };
+
+  console.log("this is the description ", descriptionState, description);
+  console.log("this is the ttitle", titleState, title);
+
   return (
     <>
       {isModelOpen ? (
@@ -55,9 +68,10 @@ export function EditModel({
               id="title"
               className="title"
               placeholder="Enter your Title"
+              value={titleState}
               onChange={(e) => {
                 const value = e.target.value;
-                console.log("vale..", value);
+                setTitleState(value);
               }}
             />
             <label htmlFor="">Description:</label>
@@ -66,6 +80,11 @@ export function EditModel({
               id="description"
               className="description"
               placeholder="Description"
+              value={descriptionState}
+              onChange={(e) => {
+                const value = e.target.value;
+                setDescriptionState(value);
+              }}
             />
             <IoClose
               className={styles.closeBtn}

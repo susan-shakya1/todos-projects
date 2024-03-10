@@ -1,11 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
-import { TGetAllTodosOutput } from "../data/Todotype";
+import { TGetTodoOutput } from "../data/Todotype";
+import { useParams } from "react-router-dom";
 
 export function GetId() {
-  const { data, isLoading, isError, error } = useQuery<TGetAllTodosOutput>({
-    queryKey: ["/api/v1/todos/"],
+  const { id } = useParams();
+  console.log("this is the Id", id);
+  const { data, isLoading, isError, error } = useQuery<TGetTodoOutput>({
+    queryKey: ["/api/v1/todos/", id],
     queryFn: async () => {
-      const response = await fetch(`http://localhost:8080/api/v1/todos/`, {
+      const response = await fetch(`http://localhost:8080/api/v1/todos/${id}`, {
         method: "GET",
         headers: {
           "content-Text": "application/json",
@@ -23,13 +26,15 @@ export function GetId() {
     return console.log("something is error", error);
   }
   return (
-    <div>
-      {data?.data.map((todo) => (
-        <div key={todo._id}>
-          <h4>{todo.title}</h4>
-          <h4>{todo.description}</h4>
-        </div>
-      ))}
+    <div
+      style={{
+        color: "white",
+      }}
+    >
+      <h3> Title: {data?.data.title}</h3>
+      <p>Id: {data?.data._id}</p>
+      <p> Description: {data?.data.description}</p>
+      <p>CreatedAt{data?.data.createdAt}</p>
     </div>
   );
 }

@@ -8,9 +8,10 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 import { EditModel } from "./EditModel";
 import ReactSwitch from "react-switch";
-export function GetTodo({ title, description }) {
+
+export function GetTodo() {
   const [isModelOpen, setIsModelOpen] = useState(false);
-  const [checked, setChecked] = useState(false);
+  const [checked, setChecked] = useState();
   const qc = useQueryClient();
   const { data, isLoading, isError, error } = useQuery<
     TGetAllTodosOutput,
@@ -58,7 +59,7 @@ export function GetTodo({ title, description }) {
   const switchMutation = useMutation({
     mutationFn: async (id: string) => {
       const res = await fetch(
-        `http://localhost:8080/api/v1/todos/toggle/status${id}`,
+        `http://localhost:8080/api/v1/todos/toggle/status/${id}`,
         {
           method: "PATCH",
           headers: {
@@ -128,17 +129,15 @@ export function GetTodo({ title, description }) {
               }}
             />
           </div>
+          <EditModel
+            isModelOpen={isModelOpen}
+            setIsModelOpen={setIsModelOpen}
+            description={todo.description}
+            title={todo.title}
+            id={todo._id}
+          />
         </div>
       ))}
-      <EditModel
-        isModelOpen={isModelOpen}
-        setIsModelOpen={setIsModelOpen}
-        description={description}
-        title={title}
-        id={data?.data.map((todo) => {
-          return todo._id;
-        })}
-      />
     </div>
   );
 }
