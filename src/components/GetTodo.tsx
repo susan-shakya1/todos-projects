@@ -1,5 +1,5 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { TGetAllTodosOutput } from "../data/Todotype";
+import { TGetAllTodosOutput, TGetTodoOutput } from "../data/Todotype";
 import styles from "./GetTodo.module.css";
 import { MdDelete } from "react-icons/md";
 import { MdEdit } from "react-icons/md";
@@ -7,12 +7,14 @@ import { useMutation } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { EditModel } from "./EditModel";
-import ReactSwitch from "react-switch";
+import Switch from "@mui/material/Switch";
 
 export function GetTodo() {
   const [isModelOpen, setIsModelOpen] = useState(false);
-  const [checked, setChecked] = useState();
+  const [checked, setChecked] = useState<boolean>();
+
   const qc = useQueryClient();
+
   const { data, isLoading, isError, error } = useQuery<
     TGetAllTodosOutput,
     Error
@@ -56,7 +58,7 @@ export function GetTodo() {
     console.log("the checking a dekete", id);
     await deleteTodos.mutateAsync(id);
   };
-  const switchMutation = useMutation({
+  const switchMutation = useMutation<TGetTodoOutput>({
     mutationFn: async (id: string) => {
       const res = await fetch(
         `http://localhost:8080/api/v1/todos/toggle/status/${id}`,
@@ -73,15 +75,19 @@ export function GetTodo() {
     },
     onSuccess: (data) => {
       console.log("checking ........", data);
-      setChecked(data.success);
+
       qc.invalidateQueries({
         queryKey: [`/api/v1/todos/`],
       });
     },
   });
+  console.log("this is the status of completed= .....", checked);
+
   const handleSwitch = async (id: string) => {
     await switchMutation.mutateAsync(id);
+    setChecked(checked);
   };
+
   if (isLoading) {
     return <p>Loading......</p>;
   }
@@ -107,12 +113,16 @@ export function GetTodo() {
               <span>CreatedAt:-</span> {todo.createdAt}
             </p>
           </div>
-          <ReactSwitch
-            checked={checked}
-            onChange={() => {
+          <Switch
+            checked={todo.isComplete}
+            onChange={(e) => {
+              const checked = e.target.checked;
+
               handleSwitch(todo._id);
+              setChecked(checked);
             }}
           />
+
           <div className={styles.buttons}>
             <MdDelete
               className={styles.btn1}

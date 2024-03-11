@@ -20,6 +20,7 @@ export function EditModel({
   const [titleState, setTitleState] = useState(title);
   const [descriptionState, setDescriptionState] = useState(description);
   const qc = useQueryClient();
+
   const updateMutation = useMutation<
     TTodoCreateOutput,
     Error,
@@ -40,13 +41,16 @@ export function EditModel({
 
       return data;
     },
+
     onSuccess: (data) => {
       console.log("the data is update fetch", data);
       qc.invalidateQueries({
-        queryKey: ["/api/v1/todos/"],
+        queryKey: ["/api/v1/todos/", id],
       });
     },
   });
+
+  // handleUpdate funciton
   const handleUpdata = async () => {
     await updateMutation.mutateAsync({
       title: titleState,
