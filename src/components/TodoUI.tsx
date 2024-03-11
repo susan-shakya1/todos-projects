@@ -42,8 +42,6 @@ export function TodoUI() {
   });
 
   const handleTodo = async () => {
-    console.log("data..", title, description);
-
     await addTodoMutation.mutateAsync({
       title: title,
       description: description,

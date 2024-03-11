@@ -3,13 +3,10 @@ import { TGetTodoOutput } from "../data/Todotype";
 import { useParams } from "react-router-dom";
 import styles from "./GetId.module.css";
 import { Navbar } from "./Navbar";
-import { useState } from "react";
 
 export function GetId() {
   const { id } = useParams();
   console.log("this is the Id", id);
-
-  const [rendering, setRendering] = useState();
 
   const { data, isLoading, isError, error } = useQuery<TGetTodoOutput>({
     queryKey: ["/api/v1/todos/", id],

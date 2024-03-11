@@ -2,7 +2,8 @@ import styles from "./EditModel.module.css";
 import { IoClose } from "react-icons/io5";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { TCreateTodoInput, TTodoCreateOutput } from "../data/Todotype";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+
 // update the todo
 export function EditModel({
   isModelOpen,
@@ -20,6 +21,11 @@ export function EditModel({
   const [titleState, setTitleState] = useState(title);
   const [descriptionState, setDescriptionState] = useState(description);
   const qc = useQueryClient();
+
+  useEffect(() => {
+    setTitleState(title);
+    setDescriptionState(description);
+  }, [title, description]);
 
   const updateMutation = useMutation<
     TTodoCreateOutput,
@@ -42,10 +48,9 @@ export function EditModel({
       return data;
     },
 
-    onSuccess: (data) => {
-      console.log("the data is update fetch", data);
+    onSuccess: () => {
       qc.invalidateQueries({
-        queryKey: ["/api/v1/todos/", id],
+        queryKey: ["/api/v1/todos/"],
       });
     },
   });
@@ -57,9 +62,6 @@ export function EditModel({
       description: descriptionState,
     });
   };
-
-  console.log("this is the description ", descriptionState, description);
-  console.log("this is the ttitle", titleState, title);
 
   return (
     <>

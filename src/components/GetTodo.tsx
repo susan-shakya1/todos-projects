@@ -11,9 +11,11 @@ import Switch from "@mui/material/Switch";
 
 export function GetTodo() {
   const [isModelOpen, setIsModelOpen] = useState(false);
+  const [selectedId, setSeletedId] = useState("");
   const [checked, setChecked] = useState<boolean>();
 
   const qc = useQueryClient();
+  type TToggleInput = { id: string };
 
   const { data, isLoading, isError, error } = useQuery<
     TGetAllTodosOutput,
@@ -31,7 +33,6 @@ export function GetTodo() {
       return data;
     },
   });
-  console.log(data, "the data........");
 
   // fetching a delete api
   const deleteTodos = useMutation({
@@ -46,8 +47,7 @@ export function GetTodo() {
 
       return data;
     },
-    onSuccess: (data) => {
-      console.log("checking ........", data);
+    onSuccess: () => {
       qc.invalidateQueries({
         queryKey: [`/api/v1/todos/`],
       });
@@ -55,13 +55,12 @@ export function GetTodo() {
   });
 
   const handleDeleteBtn = async (id: string) => {
-    console.log("the checking a dekete", id);
     await deleteTodos.mutateAsync(id);
   };
-  const switchMutation = useMutation<TGetTodoOutput>({
-    mutationFn: async (id: string) => {
+  const switchMutation = useMutation<TGetTodoOutput, Error, TToggleInput>({
+    mutationFn: async (body) => {
       const res = await fetch(
-        `http://localhost:8080/api/v1/todos/toggle/status/${id}`,
+        `http://localhost:8080/api/v1/todos/toggle/status/${body.id}`,
         {
           method: "PATCH",
           headers: {
@@ -81,10 +80,8 @@ export function GetTodo() {
       });
     },
   });
-  console.log("this is the status of completed= .....", checked);
-
   const handleSwitch = async (id: string) => {
-    await switchMutation.mutateAsync(id);
+    await switchMutation.mutateAsync({ id });
     setChecked(checked);
   };
 
@@ -94,6 +91,13 @@ export function GetTodo() {
   if (isError) {
     return <p>Loading todos errors: {error.message || ""}</p>;
   }
+
+  const selectedTodo = data?.data.find((todo) => {
+    return todo._id === selectedId;
+  });
+
+  console.log("this is the selected todo......", selectedTodo);
+
   return (
     <div className={styles.todoMain}>
       {data?.data.map((todo) => (
@@ -131,23 +135,25 @@ export function GetTodo() {
                 handleDeleteBtn(todo._id);
               }}
             />
-
             <MdEdit
               className={styles.btn2}
               onClick={() => {
                 setIsModelOpen(true);
+                setSeletedId(todo._id);
               }}
             />
           </div>
-          <EditModel
-            isModelOpen={isModelOpen}
-            setIsModelOpen={setIsModelOpen}
-            description={todo.description}
-            title={todo.title}
-            id={todo._id}
-          />
         </div>
       ))}
+      {selectedId ? (
+        <EditModel
+          isModelOpen={isModelOpen}
+          setIsModelOpen={setIsModelOpen}
+          description={selectedTodo?.description || ""}
+          title={selectedTodo?.title || ""}
+          id={selectedId}
+        />
+      ) : null}
     </div>
   );
 }
