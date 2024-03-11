@@ -10,6 +10,7 @@ export function TodoUI() {
   const qc = useQueryClient();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [addingInfo, setAddingInfo] = useState(false);
 
   const addTodoMutation = useMutation<
     TTodoCreateOutput,
@@ -56,7 +57,11 @@ export function TodoUI() {
           className={styles.form}
           onSubmit={(e) => {
             e.preventDefault();
-            handleTodo();
+            setAddingInfo(true);
+            setTimeout(() => {
+              setAddingInfo(false);
+              handleTodo();
+            }, 1500);
           }}
         >
           <div className={styles.formbody}>
@@ -90,6 +95,11 @@ export function TodoUI() {
 
           <GetTodo />
         </form>
+        {addingInfo ? (
+          <div className={styles.Adding}>
+            <h1>Adding.....</h1>
+          </div>
+        ) : null}
       </div>
     </div>
   );

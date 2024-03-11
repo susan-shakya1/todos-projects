@@ -22,6 +22,8 @@ export function EditModel({
   const [descriptionState, setDescriptionState] = useState(description);
   const qc = useQueryClient();
 
+  const [isUpdatingModalOpen, setIsUpdatingModalOpen] = useState(false);
+
   useEffect(() => {
     setTitleState(title);
     setDescriptionState(description);
@@ -102,11 +104,15 @@ export function EditModel({
                 onClick={(e) => {
                   e.preventDefault();
                   console.log("this is tyher update .....btn");
-                  handleUpdata();
-                  setIsModelOpen(false);
+                  setIsUpdatingModalOpen(true);
+                  setTimeout(() => {
+                    handleUpdata();
+                    setIsUpdatingModalOpen(false);
+                    setIsModelOpen(false);
+                  }, 2000);
                 }}
               >
-                Update
+                {isUpdatingModalOpen ? "updating........" : "update"}
               </button>
             </div>
           </form>
