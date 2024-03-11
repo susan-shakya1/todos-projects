@@ -3,6 +3,7 @@ import { TGetTodoOutput } from "../data/Todotype";
 import { useParams } from "react-router-dom";
 import styles from "./GetId.module.css";
 import { Navbar } from "./Navbar";
+import { Link } from "react-router-dom";
 
 export function GetId() {
   const { id } = useParams();
@@ -22,9 +23,11 @@ export function GetId() {
       return data;
     },
   });
+
   if (isLoading) {
     return <p>Loading ......</p>;
   }
+
   if (isError) {
     return console.log("something is error", error);
   }
@@ -38,23 +41,17 @@ export function GetId() {
         className={styles.mainContainer}
       >
         <div className={styles.container}>
-          {/* <h3> Title: {data?.data.title}</h3>
-        <p>Id: {data?.data._id}</p>
-        <p> Description: {data?.data.description}</p>
-        <p>CreatedAt{data?.data.createdAt}</p> */}
-          <div className={styles.Title}>
-            <p>Title: </p>
-            <p>Id: </p>
-            <p>Description: </p>
-            <p>Created At: </p>
-            <p>IsCompleted: </p>
-          </div>
-          <div className={styles.body}>
-            <p> {data?.data.title}</p>
-            <p> {data?.data._id}</p>
-            <p> {data?.data.description}</p>
-            <p>{data?.data.createdAt}</p>
-            <p>{data?.data.isComplete ? "true" : "false"}</p>
+          <Link to="/todos">
+            <button className={styles.backBtn}>Go Back</button>
+          </Link>
+
+          <h1 className={styles.title}> Title: {data?.data.title}</h1>
+          <p className={styles.id}>Id: {data?.data._id}</p>
+          <hr />
+          <p className={styles.description}> {data?.data.description}</p>
+          <div className={styles.wrapperOfP}>
+            <p>CreatedAT: {data?.data.createdAt}</p>
+            <p>{data?.data.isComplete ? "Completed" : "progress....."}</p>
           </div>
         </div>
       </div>

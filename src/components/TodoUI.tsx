@@ -72,7 +72,7 @@ export function TodoUI() {
               }}
             />
 
-            <input
+            <textarea
               id="description"
               className="description"
               placeholder="Description"

@@ -5,15 +5,19 @@
 .todosContainer{
    border:none;
     padding: 20px;
-    max-width: 700px;
+    width:100%;
+    height:25vh;
+    overflow: hidden;
     margin: 0 auto;
     color: aliceblue;
     margin-bottom: 20px;
     display: flex;
     justify-content: space-between;
+    align-items: center;
    background-color:#202124 ;
-   font-size: 14px;
- 
+   font-size: 16px;
+ border-radius: 20px;
+ box-shadow:3px 5px 5px rgb(46, 37, 37) ;
   
 
 
@@ -25,39 +29,49 @@
     gap: 20px;
 }
 .buttons .btn1{
-    font-size: 24px;
+    font-size: 20px;
    
     cursor:pointer;
 }
 .buttons .btn1:hover{
     transition: 0.3s ease-in-out;
-
+    transform: scale(1.4);
     color: rgba(208, 13, 13, 0.925);
 }
 .buttons .btn2{
-    font-size: 24px;
+    font-size: 20px;
    
     cursor:pointer;
 }
 .buttons .btn2:hover{
     transition: 0.3s ease-in-out;
-    color: rgba(22, 22, 202, 0.762);
+    transform: scale(1.4);
+    color: rgba(41, 41, 201, 0.762);
 }
 span{
     color: rgb(224, 112, 51);
     padding: 0 10px 0 0;
     text-decoration: none;
+    font-weight: 600;
 }
 .titlelink{
     text-decoration: none;
 }
 
-h4{
+h2{
     text-decoration: none;
-    color: aliceblue;
+    color: rgb(213, 217, 220);
     padding:3px;
 }
 .todoBox p{
     padding:3px;
+}
+.description{
+   padding: 15px 0 0 0;
+    font-size: 15px;
+
+   line-height: 1.5rem;
+   word-spacing: 2px;
+   color: rgba(200, 205, 210, 0.875);
 }
  

@@ -81,8 +81,7 @@ export function EditModel({
               }}
             />
             <label htmlFor="">Description:</label>
-            <input
-              type="text"
+            <textarea
               id="description"
               className="description"
               placeholder="Description"

@@ -104,30 +104,27 @@ export function GetTodo() {
         <div key={todo._id} className={styles.todosContainer}>
           <div className={styles.todoBox}>
             <Link to={`/todos/${todo._id}`} className={styles.titlelink}>
-              <h4>
+              <h2>
                 <span>Title:-</span> {todo.title}
-              </h4>
+              </h2>
             </Link>
-            <p>
+            <p className={styles.description}>
               <span>Description:-</span>
               {todo.description}
             </p>
-            <p>
-              {" "}
-              <span>CreatedAt:-</span> {todo.createdAt}
-            </p>
           </div>
-          <Switch
-            checked={todo.isComplete}
-            onChange={(e) => {
-              const checked = e.target.checked;
-
-              handleSwitch(todo._id);
-              setChecked(checked);
-            }}
-          />
 
           <div className={styles.buttons}>
+            <Switch
+              checked={todo.isComplete}
+              size="small"
+              onChange={(e) => {
+                const checked = e.target.checked;
+
+                handleSwitch(todo._id);
+                setChecked(checked);
+              }}
+            />
             <MdDelete
               className={styles.btn1}
               onClick={() => {
