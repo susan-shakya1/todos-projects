@@ -1,28 +1,33 @@
-import { useQuery } from "@tanstack/react-query";
-import { TGetTodoOutput } from "../data/Todotype";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { TTodoCreateOutput } from "../data/Todotype";
 import { useParams } from "react-router-dom";
 import styles from "./GetId.module.css";
 import { Navbar } from "./Navbar";
 import { Link } from "react-router-dom";
 import { FaCreditCard } from "react-icons/fa";
 import { useState } from "react";
+// import { MdDescription } from "react-icons/md";
 
-type TTodosUpdate = {
-  id: string;
+// type TTodosUpdate = {
+//   id: string;
+//   description: string;
+//   createdAt: string;
+//   title: string;
+// };
+type TCreateDescription = {
   description: string;
-  createdAt: string;
-  title: string;
 };
-
 export function GetId() {
   const [isEditOpen, setisEditOpen] = useState(false);
   const [selectedDescription, setSelectedDescription] =
-    useState<TTodosUpdate | null>();
+    useState<TCreateDescription>();
+
+  const qc = useQueryClient();
 
   const { id } = useParams();
   console.log("this is the Id", id);
 
-  const { data, isLoading, isError, error } = useQuery<TGetTodoOutput>({
+  const { data, isLoading, isError, error } = useQuery({
     queryKey: ["/api/v1/todos/", id],
     queryFn: async () => {
       const response = await fetch(`http://localhost:8080/api/v1/todos/${id}`, {
@@ -37,6 +42,42 @@ export function GetId() {
     },
   });
 
+  // seting a description value
+
+  const updateMutation = useMutation<
+    TTodoCreateOutput,
+    Error,
+    TCreateDescription
+  >({
+    mutationFn: async (body) => {
+      const resp = await fetch(`http://localhost:8080/api/v1/todos/${id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          // title: body.title,
+          description: body.description,
+        }),
+      });
+      const data = await resp.json();
+
+      return data;
+    },
+
+    onSuccess: () => {
+      qc.invalidateQueries({
+        queryKey: ["/api/v1/todos/", id],
+      });
+    },
+  });
+  // handling a submit form
+  const handleDescriptionFrom = async () => {
+    await updateMutation.mutateAsync({
+      description: selectedDescription || "",
+    });
+  };
+
   if (isLoading) {
     return <p>Loading ......</p>;
   }
@@ -45,26 +86,6 @@ export function GetId() {
     return console.log("something is error", error);
   }
 
-  const handleTextarea = (value: string) => {
-    setSelectedDescription((preval) => {
-      if (preval) {
-        return {
-          ...preval,
-          description: value,
-        };
-      } else {
-        return preval;
-      }
-    });
-  };
-
-  const handleDescriptionFrom = () => {
-    if (selectedDescription?.id === data?.data._id) {
-      return selectedDescription;
-    } else {
-      data?.data.description;
-    }
-  };
   return (
     <>
       <Navbar />
@@ -97,11 +118,10 @@ export function GetId() {
                   name="description"
                   id="description"
                   className={styles.textareaEdit}
-                  value={data?.data.description}
+                  value={selectedDescription}
                   onChange={(e) => {
-                    const value = e.target.value;
-                    console.log("this is the selected value", value);
-                    handleTextarea(value);
+                    const values = e.target.value;
+                    setSelectedDescription(values);
                   }}
                 ></textarea>
                 <div>
@@ -112,26 +132,27 @@ export function GetId() {
                 </div>
               </form>
             ) : (
-              <p className={styles.description}> {data?.data.description}</p>
+              <div>
+                <p className={styles.description}> {data?.data.description}</p>
+                <FaCreditCard
+                  className={styles.editDescription}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setisEditOpen(true);
+                    setSelectedDescription(data?.data.description);
+                  }}
+                />
+              </div>
             )}
-            <FaCreditCard
-              className={styles.editDescription}
-              onClick={(e) => {
-                e.preventDefault();
-                setisEditOpen(true);
-                setSelectedDescription({
-                  id: data?.data._id,
-                  title: data?.data.title,
-                  description: data?.data.description,
-                  createdAt: data?.data.createdAt,
-                });
-              }}
-            />
           </div>
           <div className={styles.wrapperOfP}>
             <p>CreatedAT: {data?.data.createdAt}</p>
             <p>
-              {data?.data.isComplete ? " Task Completed" : " On progress....."}
+              {data?.data.isComplete ? (
+                <span className={styles.Completed}>Task completed</span>
+              ) : (
+                <span className={styles.progress}>On progress.....</span>
+              )}
             </p>
           </div>
         </div>

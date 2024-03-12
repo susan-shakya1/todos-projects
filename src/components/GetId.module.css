@@ -86,6 +86,7 @@
    justify-content: space-between;
    align-items: center;
    margin-bottom: 15px;
+   padding: 20px;
 }
 .textareaEdit{
     width: 100%;
@@ -93,6 +94,7 @@
     outline: none;
     background-color: transparent;
     color: rgba(230, 232, 235, 0.875);
+    height: 15vh;
   
     
     
@@ -101,21 +103,29 @@
     scrollbar-width: 0;
     height: auto;
    padding: 20px;
+   
+   
     
 }
 .updateBtn{
     padding: 4px 8px;
     background-color: rgba(72, 72, 207, 0.769);
     color: aliceblue;
-    font-size: 10px;
+    font-size: 12px;
     font-weight: 600;
     cursor: pointer;
     border: none;
     border-radius: 5px;
-    margin-right: 5px;
+   
 }
 .updateBtn:hover{
     transition: 0.6s ease-in-out;
     color: #111;
     background-color: #eae6e6d1
+}
+.Completed{
+    color:rgba(51, 206, 69, 0.87);
+}
+.progress{
+    color:rgba(225, 29, 29, 0.866)
 }
