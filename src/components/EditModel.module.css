@@ -11,7 +11,7 @@ top: 0;
 left: 0;
 
 }
-form{
+.form{
     color:aliceblue;
     background-color: #202124;
     width:50%;
@@ -21,7 +21,7 @@ form{
     gap: 10px;
     position: relative;
 }
-form input, textarea{
+.form input, textarea{
     padding: 8px;
     font-size: 16px;
     border:none;
@@ -42,7 +42,7 @@ form input, textarea{
     transition: 0.4s ease-in-out;
     color:rgba(218, 8, 8, 0.845);
 }
-button{
+.button{
     padding: 8px 14px;
     border: none;
     background-color: rgba(72, 72, 207, 0.769);
@@ -51,7 +51,7 @@ button{
     font-size: 16px;
     border-radius: 8px;
 }
-button:hover{
+.button:hover{
     background-color: rgba(242, 243, 242, 0.784);
     transition: 0.6s ease-in;
     color:rgb(32, 33, 33)

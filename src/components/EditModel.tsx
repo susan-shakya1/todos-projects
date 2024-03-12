@@ -69,7 +69,7 @@ export function EditModel({
     <>
       {isModelOpen ? (
         <div className={styles.editBody}>
-          <form>
+          <form className={styles.form}>
             <label htmlFor="">Title:</label>
             <input
               type="text"
@@ -101,6 +101,7 @@ export function EditModel({
             />
             <div>
               <button
+                className={styles.button}
                 onClick={(e) => {
                   e.preventDefault();
                   console.log("this is tyher update .....btn");
